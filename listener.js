@@ -3,8 +3,8 @@ const {
   fetchFlexEvents,
   updateLastSequenceId,
 } = require("./utils/eventHelper");
-const getListingUpdatedHandler = require("./handler/listing/getListingUpdatedHandler");
-const getTransactionTransitionedHandler = require("./handler/transaction/getTransactionTransitionedHandler");
+// const getListingUpdatedHandler = require("./handler/example-listing/getListingUpdatedHandler");
+// const getTransactionTransitionedHandler = require("./handler/example-transaction/getTransactionTransitionedHandler");
 
 module.exports = async () => {
   try {
@@ -13,17 +13,19 @@ module.exports = async () => {
 
     const jobs = events.reduce((jobs, event) => {
       const { eventType } = event.attributes;
-      const { TRANSACTION_TRANSITIONED, LISTING_UPDATED } = supportedEventTypes;
+      const {
+        /** DESTRUCTURE THE SUPPORTED EVENT TYPES HERE */
+      } = supportedEventTypes;
 
       switch (eventType) {
-        case TRANSACTION_TRANSITIONED:
-          console.log("Transaction transitioned event");
-          jobs.push(getTransactionTransitionedHandler(event));
-          break;
-        case LISTING_UPDATED:
-          console.log("Listing updated event");
-          jobs.push(getListingUpdatedHandler(event));
-          break;
+        // case TRANSACTION_TRANSITIONED:
+        //   console.log("Transaction transitioned event");
+        //   jobs.push(getTransactionTransitionedHandler(event));
+        //   break;
+        // case LISTING_UPDATED:
+        //   console.log("Listing updated event");
+        //   jobs.push(getListingUpdatedHandler(event));
+        //   break;
         default:
           console.log("Event not supported");
           break;
@@ -33,7 +35,7 @@ module.exports = async () => {
     }, []);
 
     if (!jobs.length) {
-      console.log("No events to handle");
+      console.log("No jobs to run");
       return;
     }
 

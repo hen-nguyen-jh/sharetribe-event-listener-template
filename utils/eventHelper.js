@@ -1,3 +1,7 @@
+/**
+ * THIS FILE CONTAINS HELPER FUNCTIONS FOR EVENT HANDLING
+ */
+
 const moment = require("moment");
 
 const {
