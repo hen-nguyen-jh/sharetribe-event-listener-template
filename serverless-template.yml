@@ -1,0 +1,58 @@
+service: sharetribeEventListener
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage,'staging'}
+  region: eu-west-2
+  environment:
+    ENVIRONMENT: ${self:custom.ENVIRONMENT.${self:provider.stage}}
+    FLEX_INTEGRATION_CLIENT_ID: ${self:custom.FLEX_INTEGRATION_CLIENT_ID.${self:provider.stage}}
+    FLEX_INTEGRATION_CLIENT_SECRET: ${self:custom.FLEX_INTEGRATION_CLIENT_SECRET.${self:provider.stage}}
+    ADMIN_FLEX_ACCOUNT_ID: ${self:custom.ADMIN_FLEX_ACCOUNT_ID.${self:provider.stage}}
+    TIME_TO_SCHEDULE: ${self:custom.TIME_TO_SCHEDULE.${self:provider.stage}}
+    MARKETPLACE_SERVER_URL: ${self:custom.MARKETPLACE_SERVER_URL.${self:provider.stage}}
+    PADDING_TIME_MINUTES: ${self:custom.PADDING_TIME_MINUTES.${self:provider.stage}}
+
+functions:
+  rateHandler:
+    handler: index.run
+    timeout: 900
+    events:
+      # Invoke Lambda function every minute
+      - schedule: rate(2 minutes)
+
+custom:
+  stages:
+    - local
+    - staging
+    - production
+  ENVIRONMENT:
+    local: local
+    staging: staging
+    production: production
+  FLEX_INTEGRATION_CLIENT_ID:
+    local:
+    staging:
+    production:
+  FLEX_INTEGRATION_CLIENT_SECRET:
+    local:
+    staging:
+    production:
+  ADMIN_FLEX_ACCOUNT_ID:
+    local:
+    staging:
+    production:
+  TIME_TO_SCHEDULE:
+    local: 600
+    staging: 600
+    production: 2
+  MARKETPLACE_SERVER_URL:
+    local:
+    staging:
+    production:
+  PADDING_TIME_MINUTES:
+    local: 5
+    staging: 5
+    production: 2
